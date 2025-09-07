@@ -4,7 +4,6 @@ package com.atharva.erp_telecom.service;
 import com.atharva.erp_telecom.entity.Customer;
 import com.atharva.erp_telecom.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

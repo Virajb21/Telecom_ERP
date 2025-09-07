@@ -1,11 +1,13 @@
 package com.atharva.erp_telecom.entity;
 
 
+import com.atharva.erp_telecom.constants.CustomerConstants;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "customer")
@@ -146,8 +148,11 @@ public class Customer {
         this.modifiedDate = modifiedDate;
     }
 
+    // Added this getter to be appended to the response as fullname
     public String getFullName(){
-        return this.getCustomerLastName() + ", " + this.getCustomerFirstName() ;
+        return Objects.equals(this.customerClass, CustomerConstants.CUSTOMER_ENTERPRISE) ?
+                this.getCustomerFirstName() + " LLC" :
+                this.getCustomerLastName() + ", " + this.getCustomerFirstName() ;
     }
 
 }

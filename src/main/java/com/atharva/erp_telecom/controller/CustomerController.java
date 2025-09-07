@@ -36,4 +36,10 @@ public class CustomerController {
                     .orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
         }
     }
+
+    @PostMapping("/new")
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
+        Customer responseFromDB = customerService.createCustomer(customer);
+        return new ResponseEntity<Customer>(responseFromDB,HttpStatus.CREATED);
+    }
 }
