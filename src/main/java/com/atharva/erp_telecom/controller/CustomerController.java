@@ -42,4 +42,9 @@ public class CustomerController {
         Customer responseFromDB = customerService.createCustomer(customer);
         return new ResponseEntity<Customer>(responseFromDB,HttpStatus.CREATED);
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer){
+        return new ResponseEntity<>(customer,HttpStatus.OK);
+    }
 }

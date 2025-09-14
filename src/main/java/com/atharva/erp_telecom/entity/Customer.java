@@ -24,6 +24,7 @@ public class Customer {
     private String countryCode;
     private String email;
     private long contactNumber;
+    private String governmentId;
     private String addressLine1;
     private String addressLine2;
     private String region;
@@ -155,4 +156,11 @@ public class Customer {
                 this.getCustomerLastName() + ", " + this.getCustomerFirstName() ;
     }
 
+    public String getGovernmentId() {
+        return governmentId;
+    }
+
+    public void setGovernmentId(String governmentId) {
+        this.governmentId = governmentId;
+    }
 }

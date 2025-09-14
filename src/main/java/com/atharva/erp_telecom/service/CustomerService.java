@@ -10,7 +10,7 @@ import java.util.*;
 
 @Service
 public class CustomerService {
-    // Better practice to use depenedency injection in the constructor instead of field
+    // Better practice to use dependency injection in the constructor instead of field
     private final CustomerRepository customerRepository;
 
     @Autowired
