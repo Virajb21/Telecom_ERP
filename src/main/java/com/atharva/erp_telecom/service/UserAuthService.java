@@ -1,6 +1,7 @@
 package com.atharva.erp_telecom.service;
 
 
+import com.atharva.erp_telecom.dto.RegisterResponse;
 import com.atharva.erp_telecom.entity.Roles;
 import com.atharva.erp_telecom.entity.Users;
 import com.atharva.erp_telecom.repository.RolesRepository;
@@ -13,7 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.management.relation.RoleNotFoundException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserAuthService {
@@ -37,14 +40,35 @@ public class UserAuthService {
     }
 
     // Method to register a new user.
-    public Users registerNewUser(Users user){
+    public RegisterResponse registerNewUser(Users user, Set<String> roleNames) {
+        // Check if user already exists
+        if (userRepository.existsByUserName(user.getUserName())) {
+            String errorMessage = "Username already exists: " + user.getUserName();
+            return new RegisterResponse(errorMessage);
+        }
+        // Encode password using BCryptPassword Encoding
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if(user.getEnabled()==null) user.setEnabled(true);
-        return (userRepository.save(user));
+
+        // Set default value for 'enabled'
+        if (user.getEnabled() == null) user.setEnabled(true);
+        RegisterResponse response = new RegisterResponse();
+        Set<Roles> rolesSetToBeChecked =
+                roleNames.stream()
+                        .map(role -> {
+                            try {
+                                return rolesRepository.findByRoleName(role).orElseThrow(() -> new RoleNotFoundException("Role not found:" + role));
+                            } catch (RoleNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                        })
+                        .collect(Collectors.toSet());
+        user.setRoles(rolesSetToBeChecked);
+        Users savedUser = userRepository.save(user);
+        return new RegisterResponse("User with username:" + savedUser.getUserName() + " created successfully.");
     }
 
     // Authenticate existing user and return a JWT token
-    public String authenticate(String username,String password){
+    public String authenticate(String username, String password) {
         // NOTE:
         /*
             This authentication manager is responsible for checking if the credentials match or not. It implicitly calls

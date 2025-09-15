@@ -8,4 +8,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<Users,Long> {
     Optional<Users> findByUserName(String userName);
+
+    // Added new helper method for already exiting users.
+    boolean existsByUserName(String userName);
 }

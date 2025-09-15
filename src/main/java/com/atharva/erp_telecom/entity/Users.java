@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 @Table(name="users")
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Changed from GenerationType.SEQUENCE to GenerationType.IDENTITY - better suited for MYSQL.
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    // GenerationType.IDENTITY - better suited for MYSQL, but while creation SEQUENCE was used hence going with the same
     private Long userId;
 
     @Column(name = "user_name",nullable = false, unique = true,length = 100)

@@ -24,7 +24,8 @@ public class Roles {
     private Set<Users> users = new HashSet<>();
 
     // As a good practice - added No-args constructor which will be used by JPA (15/09/2025).
-    public Roles(){}
+    public Roles() {}
+    public Roles(String roleName){this.roleName=roleName;}
 
     public Long getRoleId() {
         return roleId;
