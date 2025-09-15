@@ -21,15 +21,16 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
+    // This method is only used to fetch the UserDeta
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Users user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userName));
         return new CustomUserDetails(user);
     }
 
     public String createUser(Users user){
-        return userRepository.save(user).getUsername();
+        return userRepository.save(user).getUserName();
     }
 
     public Optional<Users> getUserByUserName(String userName){

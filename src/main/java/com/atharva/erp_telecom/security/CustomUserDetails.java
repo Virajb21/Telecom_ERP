@@ -1,7 +1,6 @@
 package com.atharva.erp_telecom.security;
 
 import com.atharva.erp_telecom.entity.Users;
-import com.atharva.erp_telecom.entity.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -104,7 +103,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getUserName();
     }
 
     @Override

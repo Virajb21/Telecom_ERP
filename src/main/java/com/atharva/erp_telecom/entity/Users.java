@@ -7,7 +7,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users")
@@ -17,7 +19,7 @@ public class Users {
     private Long userId;
 
     @Column(name = "user_name",nullable = false, unique = true,length = 100)
-    private String username;
+    private String userName;
 
     @Column(name = "password",nullable = false)
     private String password;
@@ -31,7 +33,7 @@ public class Users {
     @Column(name = "customer_id")
     private String customerId;
 
-    @Column(name = "enabled",nullable = false)
+    @Column(name = "enabled")
     private Boolean enabled;
 
     @CreatedDate
@@ -60,12 +62,12 @@ public class Users {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -128,7 +130,15 @@ public class Users {
         return roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
-        this.roles = roles;
+    public void setRoles(List<Roles> roles) {
+
+            if (roles == null || roles.isEmpty()) return;
+            this.roles = roles.stream()
+                    .map(name -> {
+                        Roles role = new Roles();
+                        role.setRoleName(name.getRoleName());
+                        return role;
+                    })
+                    .collect(Collectors.toSet());
     }
 }
