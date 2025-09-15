@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableJpaAuditing // Added this annotation for enabling the created and updated timestamps.
 public class ErpTelecomApplication {
 
 	public static void main(String[] args) {

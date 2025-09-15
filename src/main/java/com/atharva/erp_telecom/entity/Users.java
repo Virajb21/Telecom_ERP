@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Table(name="users")
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Changed from GenerationType.SEQUENCE to GenerationType.IDENTITY - better suited for MYSQL.
     private Long userId;
 
     @Column(name = "user_name",nullable = false, unique = true,length = 100)
@@ -34,7 +34,7 @@ public class Users {
     private String customerId;
 
     @Column(name = "enabled")
-    private Boolean enabled;
+    private Boolean enabled = true; // Made the default value as true
 
     @CreatedDate
     @Column(name = "create_time",nullable = false,updatable = false,insertable = false,
@@ -57,7 +57,6 @@ public class Users {
     public Long getUserId() {
         return userId;
     }
-
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -65,7 +64,6 @@ public class Users {
     public String getUserName() {
         return userName;
     }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -73,7 +71,6 @@ public class Users {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -81,7 +78,6 @@ public class Users {
     public String getUserFirstName() {
         return userFirstName;
     }
-
     public void setUserFirstName(String userFirstName) {
         this.userFirstName = userFirstName;
     }
@@ -89,7 +85,6 @@ public class Users {
     public String getUserLastName() {
         return userLastName;
     }
-
     public void setUserLastName(String userLastName) {
         this.userLastName = userLastName;
     }
@@ -97,7 +92,6 @@ public class Users {
     public String getCustomerId() {
         return customerId;
     }
-
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
@@ -105,7 +99,6 @@ public class Users {
     public Boolean getEnabled() {
         return enabled;
     }
-
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
@@ -113,7 +106,6 @@ public class Users {
     public LocalDateTime getCreateTime() {
         return createTime;
     }
-
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
@@ -121,7 +113,6 @@ public class Users {
     public LocalDateTime getUpdatedTime() {
         return updatedTime;
     }
-
     public void setUpdatedTime(LocalDateTime updatedTime) {
         this.updatedTime = updatedTime;
     }
@@ -129,16 +120,8 @@ public class Users {
     public Set<Roles> getRoles() {
         return roles;
     }
-
-    public void setRoles(List<Roles> roles) {
-
-            if (roles == null || roles.isEmpty()) return;
-            this.roles = roles.stream()
-                    .map(name -> {
-                        Roles role = new Roles();
-                        role.setRoleName(name.getRoleName());
-                        return role;
-                    })
-                    .collect(Collectors.toSet());
+    // Reverted back to the older version for setter.
+    public void setRoles(Set<Roles> roles) {
+        this.roles = roles;
     }
 }
