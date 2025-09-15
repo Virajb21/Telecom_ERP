@@ -105,10 +105,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // Default overridden method
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("Entered the filter\nURI:"+request.getRequestURI());
+        String servletPath = request.getServletPath();
+        if(servletPath.equals("/users/register") || servletPath.equals("/users/login")){
+            filterChain.doFilter(request,response);
+            return ;
+        }
 
         // Fetch the request header
         String HEADER_AUTHORIZATION = "Authorization";
         final String authHeader = request.getHeader(HEADER_AUTHORIZATION);
+//        System.out.println("🔍 Headers in request:");
+//        request.getHeaderNames().asIterator()
+//                .forEachRemaining(h -> System.out.println(h + " = " + request.getHeader(h)));
+//
+//        System.out.println("Extracted Authorization header = " + authHeader);
         String userName = null;
         String jwt = null;
 
@@ -116,7 +127,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             jwt = authHeader.substring(7);
             try{
                 userName = jwtUtils.extractUsername(jwt);
-            }catch (Exception ignored){}
+            }catch (Exception e){
+                System.out.println("No bearer token in request...");
+            }
 
         }
 
@@ -127,6 +140,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            }else{
+                System.out.println("❌ JWT validation failed for: " + userName);
             }
         }
         filterChain.doFilter(request,response);

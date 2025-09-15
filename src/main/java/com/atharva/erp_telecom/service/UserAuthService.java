@@ -74,12 +74,14 @@ public class UserAuthService {
             This authentication manager is responsible for checking if the credentials match or not. It implicitly calls
             the wrapper UserService Service and findByUserName() method
          */
-
+        System.out.println("Before authenticating...");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
-        System.out.println("Inside the auth block");
+        System.out.println("After authenticating...");
         UserDetails userDetails = userService.loadUserByUsername(username);
-        return jwtUtils.generateToken(userDetails);
+        String token = jwtUtils.generateToken(userDetails);
+        System.out.println("Token: "+ token);
+        return token;
     }
 }

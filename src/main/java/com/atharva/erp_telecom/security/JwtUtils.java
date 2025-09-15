@@ -69,7 +69,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtils {
 
-    private final String JWT_SECRET_KEY = System.getenv("JWT_SECRET_KEY");
+    private final String JWT_SECRET_KEY = "cd4b16da2a14e803dd7efcf18e92464e77314958368634a6c5309c3042df14ca";
     private final long JWT_TOKEN_VALIDITY =  60 * 60 * 1000;
 
     // Method to generate signing-key (Object of type Key) using the secret key which Java JWT(JJWT) requires.
@@ -178,6 +178,7 @@ public class JwtUtils {
 
     // Method to validate the existing token
     public boolean validateToken(String token, UserDetails userDetails) {
+        System.out.println("Inside the validateToken method...");
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

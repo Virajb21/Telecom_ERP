@@ -46,7 +46,9 @@ public class UserAuthController {
     // Endpoint to authenticate an exiting user and return a JWT token
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest){
+        System.out.println("Inside the login controller...\nUsername: "+authRequest.getUsername()+"\tPassword: "+authRequest.getPassword());
         String jwtToken = userAuthService.authenticate(authRequest.getUsername(),authRequest.getPassword());
+        System.out.println("Token returned to the controller...\nToken: "+jwtToken);
         return new ResponseEntity<>(new AuthResponse(jwtToken),HttpStatus.OK);
     }
 }
