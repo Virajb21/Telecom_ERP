@@ -21,7 +21,7 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
-    // This method is only used to fetch the UserDeta
+    // This method is only used to fetch the UserData
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Users user = userRepository.findByUserName(userName)

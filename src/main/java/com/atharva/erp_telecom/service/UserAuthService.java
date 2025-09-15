@@ -8,7 +8,6 @@ import com.atharva.erp_telecom.repository.UserRepository;
 import com.atharva.erp_telecom.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,13 +37,9 @@ public class UserAuthService {
     }
 
     // Method to register a new user.
-    public Users registerNewUser(Users user, String roleName){
+    public Users registerNewUser(Users user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if(user.getEnabled()==null) user.setEnabled(true);
-        if(roleName != null){
-            Roles role = rolesRepository.findByRoleName(roleName);
-            user.getRoles().add(role);
-        }
         return (userRepository.save(user));
     }
 

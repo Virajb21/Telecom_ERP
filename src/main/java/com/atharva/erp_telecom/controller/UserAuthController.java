@@ -3,6 +3,7 @@ package com.atharva.erp_telecom.controller;
 
 import com.atharva.erp_telecom.dto.AuthRequest;
 import com.atharva.erp_telecom.dto.AuthResponse;
+import com.atharva.erp_telecom.entity.Roles;
 import com.atharva.erp_telecom.entity.Users;
 import com.atharva.erp_telecom.security.JwtUtils;
 import com.atharva.erp_telecom.service.UserAuthService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -26,11 +28,8 @@ public class UserAuthController {
 
     // Endpoint to create a new user
     @PostMapping("/register")
-    public ResponseEntity<Users> register(@RequestBody Users user, @RequestParam(name = "role", required = false) String role) {
-        Users savedUser = userAuthService.registerNewUser(user, role);
-
-//        return savedUser.map(ResponseEntity::ok)
-//                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    public ResponseEntity<Users> register(@RequestBody Users user) {
+        Users savedUser = userAuthService.registerNewUser(user);
         return new ResponseEntity<>(savedUser,HttpStatus.CREATED);
     }
 
