@@ -2,6 +2,7 @@ package com.atharva.erp_telecom.service;
 
 
 import com.atharva.erp_telecom.entity.Customer;
+import com.atharva.erp_telecom.exception.custom_exceptions.ResourceNotFoundException;
 import com.atharva.erp_telecom.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ public class CustomerService {
     }
 
     public Optional<Customer> getCustomerById(int customerId){
-        return customerRepository.findById(customerId);
+        return Optional.ofNullable(customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with ID:" + customerId)));
     }
 
     public Customer createCustomer(Customer customer){

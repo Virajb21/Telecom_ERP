@@ -4,12 +4,16 @@ package com.atharva.erp_telecom.service;
 import com.atharva.erp_telecom.dto.RegisterResponse;
 import com.atharva.erp_telecom.entity.Roles;
 import com.atharva.erp_telecom.entity.Users;
+import com.atharva.erp_telecom.exception.custom_exceptions.InvalidCredentialsException;
+import com.atharva.erp_telecom.exception.custom_exceptions.UserAlreadyExistsException;
 import com.atharva.erp_telecom.repository.RolesRepository;
 import com.atharva.erp_telecom.repository.UserRepository;
 import com.atharva.erp_telecom.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,7 +48,7 @@ public class UserAuthService {
         // Check if user already exists
         if (userRepository.existsByUserName(user.getUserName())) {
             String errorMessage = "Username already exists: " + user.getUserName();
-            return new RegisterResponse(errorMessage);
+            throw new UserAlreadyExistsException(errorMessage);
         }
         // Encode password using BCryptPassword Encoding
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -55,11 +59,7 @@ public class UserAuthService {
         Set<Roles> rolesSetToBeChecked =
                 roleNames.stream()
                         .map(role -> {
-                            try {
-                                return rolesRepository.findByRoleName(role).orElseThrow(() -> new RoleNotFoundException("Role not found:" + role));
-                            } catch (RoleNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
+                            return rolesRepository.findByRoleName(role).orElseThrow(() -> new com.atharva.erp_telecom.exception.custom_exceptions.RoleNotFoundException("Role not found:" + role));
                         })
                         .collect(Collectors.toSet());
         user.setRoles(rolesSetToBeChecked);
@@ -75,9 +75,13 @@ public class UserAuthService {
             the wrapper UserService Service and findByUserName() method
          */
         System.out.println("Before authenticating...");
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+        } catch (BadCredentialsException e) {
+            throw new InvalidCredentialsException("Invalid username or password, please verify.");
+        }
         System.out.println("After authenticating...");
         UserDetails userDetails = userService.loadUserByUsername(username);
         String token = jwtUtils.generateToken(userDetails);
