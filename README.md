@@ -1,4 +1,3 @@
-Presenting **PhotonERP** -
 ERP FOR A TELECOM INDUSTRY - A complete billing solution.
 
 PROVIDES:
